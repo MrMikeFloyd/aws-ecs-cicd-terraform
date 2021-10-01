@@ -24,7 +24,7 @@ resource "aws_ecs_task_definition" "task-def" {
   tags = {
     Name = "${var.stack}-ECS-Task-Def"
     Project = var.project
-  }
+  } //TODO: Fix dependent value for repo URL
   container_definitions = <<DEFINITION
 [
   {
@@ -51,6 +51,34 @@ resource "aws_ecs_task_definition" "task-def" {
   }
 ]
 DEFINITION
+}
+
+# ---------------------------------------------------------------------------------------------------------------------
+# SECURITY GROUP FOR ECS TASKS
+# ---------------------------------------------------------------------------------------------------------------------
+
+resource "aws_security_group" "task-sg" {
+  name        = "${var.stack}-task-sg"
+  description = "Allow inbound access to ECS tasks from the ALB only"
+  vpc_id      = aws_vpc.main.id
+
+  ingress {
+    protocol        = "tcp"
+    from_port       = var.container_port
+    to_port         = var.container_port
+    security_groups = [aws_security_group.alb-sg.id]
+  }
+
+  egress {
+    protocol    = "-1"
+    from_port   = 0
+    to_port     = 0
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+  tags = {
+    Name = "${var.stack}-task-sg"
+    Project = var.project
+  }
 }
 
 # ---------------------------------------------------------------------------------------------------------------------
