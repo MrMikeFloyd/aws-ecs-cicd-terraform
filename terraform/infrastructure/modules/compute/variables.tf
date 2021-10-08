@@ -10,10 +10,6 @@ variable "aws_region" {
   description = "The AWS region to create things in."
 }
 
-variable "aws_ecr" {
-  description = "AWS ECR "
-}
-
 variable "family" {
   description = "Family of the Task Definition"
   default     = "cloud-bootstrap"
@@ -52,3 +48,12 @@ variable "cw_log_stream" {
   description = "CloudWatch Log Stream"
   default     = "fargate"
 }
+
+variable "image_repo_url" {
+  description = "ECR Repository URL"
+}
+
+variable "aws_private_subnet_ids" {}
+variable "aws_alb_trgp_id" {}
+variable "alb_security_group_ids" {}
+variable "vpc_main_id" {}

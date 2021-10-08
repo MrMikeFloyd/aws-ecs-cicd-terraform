@@ -33,11 +33,16 @@ module "cicd" {
 
 module "compute" {
   source = "./modules/compute"
+  depends_on = [module.network.alb_security_group_ids]
   project = var.project
   stack = var.stack
   aws_region = var.aws_region
-  aws_ecr = var.aws_ecr
   fargate-task-service-role = var.fargate-task-service-role
+  image_repo_url = module.cicd.image_repo_url
+  aws_alb_trgp_id = module.network.alb_target_group_id
+  aws_private_subnet_ids = module.network.vpc_private_subnet_ids
+  alb_security_group_ids = module.network.alb_security_group_ids
+  vpc_main_id = module.network.vpc_main_id
 }
 
 module "network" {
@@ -46,4 +51,12 @@ module "network" {
   stack = var.stack
   az_count = var.az_count
   vpc_cidr = var.vpc_cidr
+}
+
+output "source_repo_clone_url_http" {
+  value = module.cicd.source_repo_clone_url_http
+}
+
+output "alb_address" {
+  value = module.network.alb_address
 }

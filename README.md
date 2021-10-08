@@ -22,7 +22,7 @@ Assuming you have your AWS CLI & Git all set up and ready to go, it's as simple 
 ### Initial Setup for Remote State & Locking
 
 1. checkout this project
-2. cd into the `terraform/initial-setup/remote-state` directory, run `terraform init`
+2. cd into the `terraform/remote-state` directory, run `terraform init`
 3. run `terraform apply`
 
 You now have all initial resources to maintain the state of your Terraform stack within AWS.
